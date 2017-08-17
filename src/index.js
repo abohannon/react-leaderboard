@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
+import axios from 'axios';
 
 class Board extends React.Component {
   constructor(props) {
@@ -20,12 +21,12 @@ class Board extends React.Component {
     console.log('Component is mounting...');
   }
 
-  // componentDidMount () {
-  //   return $.getJSON('https://fcctop100.herokuapp.com/api/fccusers/top/recent')
-  //   .then((data) => {
-  //     console.log(data.results);
-  //   });
-  // }
+  componentDidMount () {
+    axios.get(`https://fcctop100.herokuapp.com/api/fccusers/top/recent`)
+    .then(res => {
+      console.log(res);
+    });
+  }
 
   render() {
 
