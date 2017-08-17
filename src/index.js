@@ -91,15 +91,17 @@ class Table extends React.Component {
 class TableItem extends React.Component {
   render() {
     return (
-
       <tr>
-        <th scope="row">#</th>
-        <td>{this.props.user[1].username}</td>
+        <th scope="row">1</th>
+        <td>
+          {console.log(this.props.user[0].img)}
+          <img src={this.props.user[0].img} style={{width: "40px", paddingRight: "5px"}} alt="User profile"/>
+          {this.props.user[0].username}
+        </td>
         {console.log('tableItem:', this.props.user)}
-        <td>00</td>
-        <td>00</td>
+        <td>{this.props.user[0].recent}</td>
+        <td>{this.props.user[0].alltime}</td>
       </tr>
-
     );
   }
 }
