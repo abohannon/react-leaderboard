@@ -9,11 +9,7 @@ class Board extends React.Component {
     super(props);
 
     this.state = {
-      rank: '',
-      username: '',
-      points30: '',
-      pointsAll: ''
-
+      userData: []
     };
   }
 
@@ -21,14 +17,16 @@ class Board extends React.Component {
     console.log('Component is mounting...');
   }
 
-  componentDidMount () {
-    axios.get(`https://fcctop100.herokuapp.com/api/fccusers/top/recent`)
-    .then(res => {
-      console.log(res);
+  componentDidMount() {
+    axios.get(`https://fcctop100.herokuapp.com/api/fccusers/top/recent`).then(res => {
+      this.setState({userData: res.data});
+
     });
   }
 
   render() {
+
+    // component styles
 
     const BoardStyle = {
       container: {
@@ -42,27 +40,30 @@ class Board extends React.Component {
         height: "100px",
         padding: "25px 15px 25px 15px",
         boxShadow: "0 -1px 6px rgba(0,0,0,0.16), 0 -1px 6px rgba(0,0,0,0.23)"
-      },
+      }
     };
 
     return (
-      <div style={{marginTop: "5vh"}}>
-      <div className="container rounded-top boardHeader" style={BoardStyle.header}>
-        <h1>Freecodecamp Leaderboard</h1>
-      </div>
-      <div className="container rounded-bottom" style={BoardStyle.container}>
-        <div className="row">
-          <div className="col 12">
 
-              <Table/>
+      <div style={{
+        marginTop: "5vh"
+      }}>
+        <div className="container rounded-top boardHeader" style={BoardStyle.header}>
+          <h1>Freecodecamp Leaderboard</h1>
+        </div>
+        <div className="container rounded-bottom" style={BoardStyle.container}>
+          <div className="row">
+            <div className="col 12">
+              {this.state.userData.length > 0
+                ? <Table users={this.state.userData}/>
+                : "loading..."
+}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
     );
   }
-
 }
 
 class Table extends React.Component {
@@ -79,9 +80,8 @@ class Table extends React.Component {
           </tr>
         </thead>
         <tbody>
-          <TableItem/>
+          <TableItem user={this.props.users}/>
         </tbody>
-
       </table>
 
     );
@@ -93,10 +93,11 @@ class TableItem extends React.Component {
     return (
 
       <tr>
-        <th scope="row">1</th>
-        <td>SkyCoder</td>
-        <td>314</td>
-        <td>2158</td>
+        <th scope="row">#</th>
+        <td>{this.props.user[1].username}</td>
+        {console.log('tableItem:', this.props.user)}
+        <td>00</td>
+        <td>00</td>
       </tr>
 
     );
