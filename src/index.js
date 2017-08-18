@@ -20,8 +20,9 @@ class Board extends React.Component {
   componentDidMount() {
     axios.get(`https://fcctop100.herokuapp.com/api/fccusers/top/recent`).then(res => {
       this.setState({userData: res.data});
-
+      console.log('Component mounted.');
     });
+
   }
 
   render() {
@@ -56,8 +57,7 @@ class Board extends React.Component {
             <div className="col 12">
               {this.state.userData.length > 0
                 ? <Table users={this.state.userData}/>
-                : "loading..."
-}
+                : "loading..."}
             </div>
           </div>
         </div>
@@ -67,9 +67,17 @@ class Board extends React.Component {
 }
 
 class Table extends React.Component {
-  render() {
-    return (
 
+  render() {
+
+    let count = 0;
+
+    const getUser = this.props.users.map((user) => {
+      count++;
+       return <TableItem key={user.username} user={user} rank={count}/>;
+     });
+
+    return (
       <table className="table table-hover">
         <thead>
           <tr>
@@ -80,10 +88,9 @@ class Table extends React.Component {
           </tr>
         </thead>
         <tbody>
-          <TableItem user={this.props.users}/>
+          {getUser}
         </tbody>
       </table>
-
     );
   }
 }
@@ -92,15 +99,13 @@ class TableItem extends React.Component {
   render() {
     return (
       <tr>
-        <th scope="row">1</th>
+        <th scope="row">{this.props.rank}</th>
         <td>
-          {console.log(this.props.user[0].img)}
-          <img src={this.props.user[0].img} style={{width: "40px", paddingRight: "5px"}} alt="User profile"/>
-          {this.props.user[0].username}
+          <img src={this.props.user.img} style={{width: "40px", paddingRight: "5px"}} alt="User profile"/>
+          {this.props.user.username}
         </td>
-        {console.log('tableItem:', this.props.user)}
-        <td>{this.props.user[0].recent}</td>
-        <td>{this.props.user[0].alltime}</td>
+        <td>{this.props.user.recent}</td>
+        <td>{this.props.user.alltime}</td>
       </tr>
     );
   }
