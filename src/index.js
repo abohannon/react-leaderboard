@@ -11,6 +11,8 @@ class Board extends React.Component {
     this.state = {
       userData: []
     };
+
+    this.sortColumn = this.sortColumn.bind(this);
   }
 
   componentWillMount() {
@@ -25,7 +27,16 @@ class Board extends React.Component {
 
   }
 
+  sortColumn() {
+    const sorted = this.state.userData.slice().sort((a, b) => {
+      return a.recent - b.recent;
+    });
+    this.setState({userData: sorted});
+  }
+
   render() {
+
+    console.log("state.userData:", this.state.userData);
 
     // component styles
 
@@ -56,7 +67,7 @@ class Board extends React.Component {
           <div className="row">
             <div className="col 12">
               {this.state.userData.length > 0
-                ? <Table users={this.state.userData}/>
+                ? <Table users={this.state.userData} sort={this.sortColumn}/>
                 : "loading..."}
             </div>
           </div>
@@ -67,15 +78,15 @@ class Board extends React.Component {
 }
 
 class Table extends React.Component {
-
   render() {
 
+    const userArray = this.props.users;
     let count = 0;
 
-    const getUser = this.props.users.map((user) => {
+    const getUser = userArray.map((user) => {
       count++;
-       return <TableItem key={user.username} user={user} rank={count}/>;
-     });
+      return <TableItem key={user.username} user={user} rank={count}/>;
+    });
 
     return (
       <table className="table table-hover">
@@ -83,7 +94,7 @@ class Table extends React.Component {
           <tr>
             <th>#</th>
             <th>Camper Name</th>
-            <th>Pts last 30 days</th>
+            <th onClick={this.props.sort}>Pts last 30 days</th>
             <th>Pts all time</th>
           </tr>
         </thead>
@@ -101,8 +112,10 @@ class TableItem extends React.Component {
       <tr>
         <th scope="row">{this.props.rank}</th>
         <td>
-          <img src={this.props.user.img} style={{width: "40px", paddingRight: "5px"}} alt="User profile"/>
-          {this.props.user.username}
+          <img src={this.props.user.img} style={{
+            width: "40px",
+            paddingRight: "5px"
+          }} alt="User profile"/> {this.props.user.username}
         </td>
         <td>{this.props.user.recent}</td>
         <td>{this.props.user.alltime}</td>
