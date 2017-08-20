@@ -9,10 +9,13 @@ class Board extends React.Component {
     super(props);
 
     this.state = {
-      userData: []
+      userData: [],
+      recentSorted: false,
+      allSorted: false
     };
 
-    this.sortColumn = this.sortColumn.bind(this);
+    this.sortRecent = this.sortRecent.bind(this);
+    this.sortAll = this.sortAll.bind(this);
   }
 
   componentWillMount() {
@@ -24,14 +27,46 @@ class Board extends React.Component {
       this.setState({userData: res.data});
       console.log('Component mounted.');
     });
-
   }
 
-  sortColumn() {
-    const sorted = this.state.userData.slice().sort((a, b) => {
+  sortRecent() {
+    const sortRecentUp = this.state.userData.slice().sort((a, b) => {
       return a.recent - b.recent;
     });
-    this.setState({userData: sorted});
+    const sortRecentDown = this.state.userData.slice().sort((a, b) => {
+      return b.recent - a.recent;
+    });
+    if (this.state.recentSorted === false) {
+      this.setState({
+        userData: sortRecentUp,
+        recentSorted: true
+      });
+    } else {
+      this.setState({
+        userData: sortRecentDown,
+        recentSorted: false
+      });
+    }
+  }
+
+  sortAll() {
+    const sortAllUp = this.state.userData.slice().sort((a, b) => {
+      return a.alltime - b.alltime;
+    });
+    const sortAllDown = this.state.userData.slice().sort((a, b) => {
+      return b.alltime - a.alltime;
+    });
+    if (this.state.allSorted === false) {
+      this.setState({
+        userData: sortAllUp,
+        allSorted: true
+      });
+    } else {
+      this.setState({
+        userData: sortAllDown,
+        allSorted: false
+      });
+    }
   }
 
   render() {
@@ -41,33 +76,26 @@ class Board extends React.Component {
     // component styles
 
     const BoardStyle = {
-      container: {
-        boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"
-      },
-
       header: {
         backgroundColor: "#3F60DA",
         width: "100%",
         color: "white",
         height: "100px",
         padding: "25px 15px 25px 15px",
-        boxShadow: "0 -1px 6px rgba(0,0,0,0.16), 0 -1px 6px rgba(0,0,0,0.23)"
       }
     };
 
     return (
 
-      <div style={{
-        marginTop: "5vh"
-      }}>
+      <div style={{marginTop: "5vh"}}>
         <div className="container rounded-top boardHeader" style={BoardStyle.header}>
           <h1>Freecodecamp Leaderboard</h1>
         </div>
-        <div className="container rounded-bottom" style={BoardStyle.container}>
+        <div className="container rounded-bottom border" style={BoardStyle.container}>
           <div className="row">
             <div className="col 12">
               {this.state.userData.length > 0
-                ? <Table users={this.state.userData} sort={this.sortColumn}/>
+                ? <Table users={this.state.userData} sortRecent={this.sortRecent} sortAll={this.sortAll}/>
                 : "loading..."}
             </div>
           </div>
@@ -94,8 +122,8 @@ class Table extends React.Component {
           <tr>
             <th>#</th>
             <th>Camper Name</th>
-            <th onClick={this.props.sort}>Pts last 30 days</th>
-            <th>Pts all time</th>
+            <th onClick={this.props.sortRecent}>Pts last 30 days</th>
+            <th onClick={this.props.sortAll}>Pts all time</th>
           </tr>
         </thead>
         <tbody>
