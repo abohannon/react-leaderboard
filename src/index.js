@@ -80,16 +80,17 @@ class Board extends React.Component {
         backgroundColor: "#3F60DA",
         width: "100%",
         color: "white",
-        height: "100px",
-        padding: "25px 15px 25px 15px",
+        padding: "30px 15px 5px 15px",
+        textAlign: "center"
       }
     };
 
     return (
 
-      <div style={{marginTop: "5vh"}}>
+      <div style={{marginTop: "5vh", minWidth: "600px"}}>
         <div className="container rounded-top boardHeader" style={BoardStyle.header}>
-          <h1>Freecodecamp Leaderboard</h1>
+          <img src="https://www.freecodecamp.com/design-style-guide/img/freeCodeCamp.svg" />
+          <p style={{fontWeight: "300", padding: "10px"}}>Top campers from the last 30 days</p>
         </div>
         <div className="container rounded-bottom border" style={BoardStyle.container}>
           <div className="row">
@@ -122,8 +123,8 @@ class Table extends React.Component {
           <tr>
             <th>#</th>
             <th>Camper Name</th>
-            <th onClick={this.props.sortRecent}>Pts last 30 days</th>
-            <th onClick={this.props.sortAll}>Pts all time</th>
+            <th onClick={this.props.sortRecent} style={{cursor: "pointer"}}>Points (Last 30)</th>
+            <th onClick={this.props.sortAll} style={{cursor: "pointer"}}>Points (All Time)</th>
           </tr>
         </thead>
         <tbody>
